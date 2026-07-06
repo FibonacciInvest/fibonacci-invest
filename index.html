@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fibonacci Invest</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegacao principal">
+        <div class="brand">
+          <img class="brand-logo" src="assets/fibonacci-logo.png" alt="Fibonacci Assessoria Contabil" />
+          <div>
+            <strong>Fibonacci Invest</strong>
+            <span>Plataforma de inteligencia imobiliaria</span>
+          </div>
+        </div>
+        <nav class="nav-list">
+          <button class="nav-item active" data-view="dashboard">Dashboard</button>
+          <button class="nav-item" data-view="search">Buscar Oportunidades</button>
+          <button class="nav-item" data-view="ai">Inteligencia Artificial</button>
+          <button class="nav-item" data-view="reports">Relatorios</button>
+          <button class="nav-item" data-view="legal">Analise Juridica</button>
+          <button class="nav-item" data-view="finance">Analise Financeira</button>
+          <button class="nav-item" data-view="market">Comparador de Mercado</button>
+          <button class="nav-item" data-view="crm">CRM dos Imoveis</button>
+          <button class="nav-item" data-view="agenda">Agenda de Leiloes</button>
+          <button class="nav-item" data-view="history">Historico</button>
+          <button class="nav-item" data-view="portfolio">Patrimonio</button>
+          <button class="nav-item" data-view="settings">Configuracoes</button>
+        </nav>
+        <div class="sidebar-footer">
+          <span>Patrimonio investido</span>
+          <strong id="sidebarPortfolio">R$ 0</strong>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Inteligencia para investimentos em leiloes</p>
+            <div class="page-title-row">
+              <img class="title-logo" src="assets/fibonacci-logo.png" alt="" />
+              <h1 id="pageTitle">Dashboard Executivo</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-button" id="resetData" title="Restaurar dados de exemplo" aria-label="Restaurar dados">↺</button>
+            <button class="primary-button" id="openNewProperty">Novo imovel</button>
+          </div>
+        </header>
+
+        <section id="dashboard" class="view active-view">
+          <div class="metrics-grid" id="metricsGrid"></div>
+          <div class="split-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Radar de oportunidades</h2>
+                <span class="tag">Monitor 24h simulado</span>
+              </div>
+              <div class="radar-panel">
+                <div class="radar-ring"></div>
+                <div class="radar-dot dot-a">Campinas<br /><strong>94</strong></div>
+                <div class="radar-dot dot-b">Jundiai<br /><strong>96</strong></div>
+                <div class="radar-dot dot-c">Sorocaba<br /><strong>91</strong></div>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Melhores oportunidades</h2>
+                <span class="tag">Score Fibonacci</span>
+              </div>
+              <div id="rankingList" class="ranking-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="search" class="view">
+          <div class="search-layout">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Filtros de pesquisa</h2>
+                <span class="tag">APIs + scraping + base propria</span>
+              </div>
+              <form id="searchForm" class="form-grid compact"></form>
+              <div class="button-row">
+                <button class="primary-button" id="runSearch">Pesquisar</button>
+                <button class="secondary-button" id="saveSearch">Salvar filtro</button>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Fontes consultadas</h2>
+                <span class="tag">Conectores</span>
+              </div>
+              <div id="sourceStatus" class="source-grid"></div>
+            </section>
+          </div>
+          <section class="panel import-panel">
+            <div class="panel-header">
+              <h2>Importar oportunidades por XLSX</h2>
+              <span class="tag">Base propria</span>
+            </div>
+            <div class="import-layout">
+              <label class="import-dropzone" for="xlsxImport">
+                <strong>Selecionar arquivo .xlsx</strong>
+                <span>Use a primeira aba da planilha. Aceita o export de leiloes com Link, Id Lote, Titulo, Municipio, UF, Bairro, Avaliacao, Valor 1, Valor 2, Desconto, Data 1, Data 2, Status, Subcategoria, Leiloeiro, Processo, documentos e imagens.</span>
+                <input id="xlsxImport" type="file" accept=".xlsx,.xls" />
+              </label>
+              <div class="import-actions">
+                <button class="primary-button" id="importXlsx">Importar XLSX</button>
+                <button class="secondary-button" id="downloadXlsxTemplate">Baixar modelo</button>
+                <div id="importStatus" class="import-status">Nenhum arquivo selecionado.</div>
+              </div>
+            </div>
+          </section>
+          <div class="table-wrap search-results">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cidade</th>
+                  <th>Bairro</th>
+                  <th>Fonte</th>
+                  <th>Avaliacao</th>
+                  <th>Leilao</th>
+                  <th>Desconto</th>
+                  <th>Lucro</th>
+                  <th>ROI</th>
+                  <th>Score</th>
+                  <th>Recomendacao</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="searchRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="ai" class="view">
+          <div class="split-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Pergunte para a IA</h2>
+                <span class="tag">Assistente de investimento</span>
+              </div>
+              <textarea id="aiPrompt" placeholder="Exemplo: Vale a pena comprar o imovel de Campinas no segundo leilao?"></textarea>
+              <div class="button-row">
+                <button class="secondary-button quick-question" data-question="Qual e o melhor imovel agora?">Melhor imovel</button>
+                <button class="secondary-button quick-question" data-question="Qual tem maior risco juridico?">Maior risco</button>
+                <button class="primary-button" id="askAi">Responder</button>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Resposta</h2>
+                <span class="tag">Analise automatica</span>
+              </div>
+              <div id="aiAnswer" class="ai-card"></div>
+            </section>
+          </div>
+          <div class="panel report-panel">
+            <div class="panel-header">
+              <h2>Relatorio para socio investidor</h2>
+              <span class="tag">PDF + mensagem pronta</span>
+            </div>
+            <div class="report-actions">
+              <label class="field">
+                <span>Imovel analisado</span>
+                <select id="reportProperty"></select>
+              </label>
+              <label class="field">
+                <span>Contato WhatsApp</span>
+                <input id="investorWhatsapp" type="tel" placeholder="Ex: 5516999999999" />
+              </label>
+              <label class="field">
+                <span>E-mail do socio</span>
+                <input id="investorEmail" type="email" placeholder="socio@email.com" />
+              </label>
+              <div class="button-row">
+                <button class="primary-button" id="downloadReport">Baixar PDF</button>
+                <button class="secondary-button" id="sendWhatsapp">WhatsApp</button>
+                <button class="secondary-button" id="sendEmail">E-mail</button>
+              </div>
+            </div>
+            <div id="reportDownloadArea" class="generated-link-area"></div>
+            <div id="shareLinks" class="generated-link-area"></div>
+            <div id="reportPreview" class="report-preview"></div>
+          </div>
+        </section>
+
+        <section id="reports" class="view">
+          <div class="panel report-panel main-report-panel">
+            <div class="panel-header">
+              <h2>Relatorio para socio investidor</h2>
+              <span class="tag">Escolha, gere e envie</span>
+            </div>
+            <div class="step-grid">
+              <article class="step-card">
+                <strong>1. Escolha o imovel</strong>
+                <span>Selecione a oportunidade que sera avaliada.</span>
+                <label class="field">
+                  <span>Imovel analisado</span>
+                  <select id="reportPropertyMain"></select>
+                </label>
+              </article>
+              <article class="step-card">
+                <strong>2. Gere o PDF</strong>
+                <span>Baixe o parecer executivo para anexar.</span>
+                <button class="primary-button" id="downloadReportMain">Gerar relatorio em PDF</button>
+                <div id="reportDownloadAreaMain" class="generated-link-area"></div>
+              </article>
+              <article class="step-card">
+                <strong>3. Envie ao socio</strong>
+                <span>Prepare a mensagem para WhatsApp ou e-mail.</span>
+                <input id="investorWhatsappMain" type="tel" placeholder="WhatsApp: 5516999999999" />
+                <input id="investorEmailMain" type="email" placeholder="E-mail: socio@email.com" />
+                <div class="button-row">
+                  <button class="secondary-button" id="sendWhatsappMain">Preparar WhatsApp</button>
+                  <button class="secondary-button" id="sendEmailMain">Preparar e-mail</button>
+                </div>
+                <div id="shareLinksMain" class="generated-link-area"></div>
+              </article>
+            </div>
+            <div id="reportPreviewMain" class="report-preview"></div>
+          </div>
+        </section>
+
+        <section id="legal" class="view">
+          <div class="split-grid legal-layout">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Leitura de edital ou matricula</h2>
+                <span class="tag">Risco juridico</span>
+              </div>
+              <textarea id="legalText" placeholder="Cole aqui texto de matricula, edital ou observacoes juridicas."></textarea>
+              <div class="button-row">
+                <button class="secondary-button" id="loadLegalSample">Usar exemplo</button>
+                <button class="primary-button" id="analyzeLegal">Analisar risco</button>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Parecer juridico</h2>
+                <span id="riskTag" class="tag">Aguardando</span>
+              </div>
+              <div id="legalResult" class="ai-card">Cole um documento para encontrar alienacao fiduciaria, penhora, ocupacao, execucao fiscal, indisponibilidade e outros alertas.</div>
+            </section>
+          </div>
+        </section>
+
+        <section id="finance" class="view">
+          <div class="simulator-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Simulador financeiro</h2>
+                <span class="tag">Lance maximo</span>
+              </div>
+              <form id="simulatorForm" class="form-grid"></form>
+            </section>
+            <section class="panel result-panel">
+              <div class="panel-header">
+                <h2>Resultado</h2>
+                <span id="recommendationTag" class="tag"></span>
+              </div>
+              <div id="simulationResult" class="result-stack"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="market" class="view">
+          <div class="split-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Comparaveis da regiao</h2>
+                <span id="marketProperty" class="tag"></span>
+              </div>
+              <div class="table-wrap compact-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Endereco</th>
+                      <th>Valor</th>
+                      <th>m²</th>
+                      <th>Fonte</th>
+                    </tr>
+                  </thead>
+                  <tbody id="comparableRows"></tbody>
+                </table>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Indicadores</h2>
+                <span class="tag">Mercado local</span>
+              </div>
+              <div id="regionIndicators" class="indicator-grid"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="crm" class="view">
+          <div id="crmBoard" class="kanban"></div>
+        </section>
+
+        <section id="agenda" class="view">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Proximos leiloes e prazos</h2>
+              <span class="tag">Calendario operacional</span>
+            </div>
+            <div id="agendaList" class="agenda-list"></div>
+          </div>
+        </section>
+
+        <section id="history" class="view">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Historico de monitoramento</h2>
+              <span class="tag">Auditoria</span>
+            </div>
+            <div id="historyList" class="history-list"></div>
+          </div>
+        </section>
+
+        <section id="portfolio" class="view">
+          <div class="portfolio-grid" id="portfolioGrid"></div>
+        </section>
+
+        <section id="settings" class="view">
+          <div class="split-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Fontes de dados</h2>
+                <span class="tag">Configuracao</span>
+              </div>
+              <div id="connectorList" class="connector-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Preferencias de investimento</h2>
+                <span class="tag">Score</span>
+              </div>
+              <form id="settingsForm" class="form-grid compact"></form>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="propertyDialog">
+      <form method="dialog" class="dialog-card" id="propertyForm">
+        <div class="panel-header">
+          <h2>Novo imovel</h2>
+          <button class="icon-button" value="cancel" aria-label="Fechar">×</button>
+        </div>
+        <div class="form-grid dialog-grid" id="propertyFields"></div>
+        <div class="button-row end">
+          <button class="secondary-button" value="cancel">Cancelar</button>
+          <button class="primary-button" id="saveProperty" value="default">Salvar oportunidade</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="detailDialog">
+      <div class="dialog-card">
+        <div class="panel-header">
+          <h2 id="detailTitle">Imovel</h2>
+          <button class="icon-button" id="closeDetail" aria-label="Fechar">×</button>
+        </div>
+        <div id="detailContent" class="detail-grid"></div>
+      </div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
